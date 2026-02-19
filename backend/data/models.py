@@ -16,7 +16,7 @@ class Valentine(Base):
     __tablename__ = "valentine"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
-    author: Mapped[str] = mapped_column(String(35))
+    # author: Mapped[str] = mapped_column(String(35))
     text: Mapped[str] = mapped_column(String(1000))
-    recipient_id: Mapped[int] = mapped_column(Integer)
+    recipient_email: Mapped[str] = mapped_column(String(35))
     dispatch_date: Mapped[datetime] = mapped_column(DateTime)
