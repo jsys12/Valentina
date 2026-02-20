@@ -49,3 +49,8 @@ async def create_valentine(db: AsyncSession, text: str, recipient_email: str, di
     await db.commit()
     await db.refresh(valentine)
     return valentine
+
+async def get_valentine(db: AsyncSession, id: int):
+    from data.models import Valentine
+    result = await db.execute(select(Valentine).where(Valentine.id == id))
+    return result.scalar_one_or_none()
