@@ -122,3 +122,9 @@ button:hover {
 .submit_name {
   margin-right: -15px;
 }
+
+#message,
+#name,
+#email {
+  resize: none;
+}
