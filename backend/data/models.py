@@ -1,4 +1,4 @@
-from sqlalchemy import Integer, String, DateTime, ForeignKey
+from sqlalchemy import Integer, String, DateTime, ForeignKey, Boolean
 from sqlalchemy.orm import Mapped, mapped_column
 from data.database import Base
 from datetime import datetime
@@ -16,7 +16,8 @@ class Valentine(Base):
     __tablename__ = "valentine"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
-    # author: Mapped[str] = mapped_column(String(35))
     text: Mapped[str] = mapped_column(String(1000))
-    recipient_email: Mapped[str] = mapped_column(String(35))
+    recipient_email: Mapped[str] = mapped_column(String(321))
+    author_email: Mapped[str] = mapped_column(String(321))
     dispatch_date: Mapped[datetime] = mapped_column(DateTime)
+    is_public: Mapped[bool] = mapped_column(Boolean)

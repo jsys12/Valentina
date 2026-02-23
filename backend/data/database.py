@@ -54,3 +54,8 @@ async def get_valentine(db: AsyncSession, id: int):
     from data.models import Valentine
     result = await db.execute(select(Valentine).where(Valentine.id == id))
     return result.scalar_one_or_none()
+
+async def get_public_valentines(db: AsyncSession):
+    from data.models import Valentine
+    result = await db.execute(select(Valentine).where(Valentine.is_public == 1))
+    return result.all()
