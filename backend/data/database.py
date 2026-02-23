@@ -40,7 +40,7 @@ async def get_db():
 #         await db.commit()
 #     return user
 
-async def create_valentine(db: AsyncSession, text: str, recipient_email: str, dispatch_date: datetime = None):
+async def create_valentine(db: AsyncSession, text: str, recipient_email: str, author_email: str, is_public: bool, dispatch_date: datetime = None):
     from data.models import Valentine
     if dispatch_date is None:
         dispatch_date = datetime.now()
@@ -58,4 +58,4 @@ async def get_valentine(db: AsyncSession, id: int):
 async def get_public_valentines(db: AsyncSession):
     from data.models import Valentine
     result = await db.execute(select(Valentine).where(Valentine.is_public == 1))
-    return result.all()
+    return result.scalars().all()
