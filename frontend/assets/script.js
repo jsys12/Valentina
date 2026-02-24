@@ -2,12 +2,26 @@ const API_URL = "/api/v1/events";
 
 // Загрузка опубликованных валентинок
 async function loadValentines() {
+  const container = document.getElementById("valentinesList");
+
+  // Показываем лоадер
+  container.innerHTML = `
+    <div class="loader-wrapper">
+      <div class="loader"></div>
+      <p class="loader-text">Загружаем валентинки...</p>
+    </div>
+  `;
+
   try {
     const res = await fetch(API_URL);
     const data = await res.json();
 
-    const container = document.getElementById("valentinesList");
     container.innerHTML = "";
+
+    if (data.length === 0) {
+      container.innerHTML = `<p class="empty-text">Пока нет опубликованных валентинок 💔</p>`;
+      return;
+    }
 
     data.forEach(val => {
       const card = document.createElement("div");
@@ -27,6 +41,7 @@ async function loadValentines() {
     });
 
   } catch (err) {
+    container.innerHTML = `<p class="empty-text">Не удалось загрузить валентинки ⚠️</p>`;
     console.log("Ошибка загрузки валентинок:", err);
   }
 }
@@ -64,6 +79,11 @@ async function submitValentine() {
   formData.append("is_public", isPublic);
 
   const responseMessage = document.getElementById("responseMessage");
+  const btn = document.querySelector("button");
+
+  // Блокируем кнопку пока отправляем
+  btn.disabled = true;
+  btn.textContent = "Отправляем...";
 
   try {
     const res = await fetch(API_URL, {
@@ -93,6 +113,9 @@ async function submitValentine() {
   } catch (err) {
     responseMessage.innerText = "Ошибка соединения с сервером ⚠️";
     responseMessage.style.color = "red";
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "Отправить 💌";
   }
 }
 
