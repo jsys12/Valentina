@@ -5,6 +5,7 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 from fastapi import FastAPI, status
 from fastapi.exceptions import RequestValidationError
+from fastapi.staticfiles import StaticFiles
 import uvicorn
 
 from backend.app.api.v1 import event
@@ -36,6 +37,8 @@ app.add_middleware(SQLAlchemySessionMiddleware)
 app.add_middleware(ExceptionMiddleware)
 app.add_middleware(AccessLogMiddleware)
 
+
+app.mount("/", StaticFiles(directory="frontend", html=True), name="frontend")
 
 app.include_router(
     event.router,

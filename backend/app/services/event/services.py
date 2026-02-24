@@ -11,6 +11,7 @@ from schemas import (
     StrEventDescription,
     StrEventTitle,
 )
+from backend.app.notification.mail import send_valentine
 
 if TYPE_CHECKING:
     from schemas import CreateEventDTO
@@ -38,6 +39,8 @@ class ManagementEvents:
             data.is_public, 
             data.dispatch_date
         )
+
+        await send_valentine(data.recipient_email, data.text)
 
         return CreateEventResponseDTO.model_validate(event)
 
