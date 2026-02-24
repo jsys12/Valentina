@@ -164,7 +164,6 @@ button:hover {
   opacity: 0.95;
 }
 
-/* Лоадер */
 .loader-wrapper {
   grid-column: 1 / -1;
   display: flex;
