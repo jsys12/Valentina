@@ -4,11 +4,23 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>LoveLetters</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/assets/style.css" />
   <link rel="icon" href="/assets/png/love_icon.png" type="image/x-icon">
 </head>
 
 <body>
+
+  <header class="header">
+    <div class="header-inner">
+      <span class="logo">
+        <span class="logo-icon">💌</span>
+        LoveLetters
+      </span>
+      <span class="header-tagline">Делись теплом</span>
+    </div>
+  </header>
 
   <section class="hero">
     <h1>Подари немного любви 💖</h1>
@@ -16,47 +28,41 @@
   </section>
 
   <section class="form-container">
+    <div class="form-field">
+      <label for="message">Текст валентинки</label>
+      <textarea id="message" placeholder="Напиши что-то тёплое..." rows="4"></textarea>
+    </div>
 
-    <textarea 
-      id="message"
-      placeholder="Текст валентинки..."
-      rows="4"
-    ></textarea>
-
-    <input 
-      type="email"
-      id="author_email"
-      placeholder="Ваш email"
-    />
-
-    <input 
-      type="email"
-      id="email"
-      placeholder="Email получателя"
-    />
+    <div class="form-row">
+      <div class="form-field">
+        <label for="author_email">Ваш email</label>
+        <input type="email" id="author_email" placeholder="you@example.com" />
+      </div>
+      <div class="form-field">
+        <label for="email">Email получателя</label>
+        <input type="email" id="email" placeholder="friend@example.com" />
+      </div>
+    </div>
 
     <div class="radio-group">
-      <label>
+      <label class="radio-label">
         <input type="radio" name="type" value="anonymous" checked class="submit_name"/>
-        Анонимно
+        <span>Анонимно</span>
       </label>
-
-      <label>
+      <label class="radio-label">
         <input type="radio" name="type" value="public" class="submit_name"/>
-        С моим именем
+        <span>С моим именем</span>
       </label>
     </div>
 
-    <button onclick="submitValentine()">
-      Отправить 💌
-    </button>
-
+    <button onclick="submitValentine()">Отправить 💌</button>
     <p id="responseMessage"></p>
-
   </section>
 
   <section class="feed">
-    <h2>Опубликованные валентинки 💕</h2>
+    <div class="feed-header">
+      <h2>Опубликованные валентинки 💕</h2>
+    </div>
     <div id="valentinesList" class="cards"></div>
     <div class="end_plate">
       <div class="heart_wrapper">💝</div>
