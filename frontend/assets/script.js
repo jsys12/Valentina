@@ -1,10 +1,8 @@
 const API_URL = "/api/v1/events";
 
-// Загрузка опубликованных валентинок
 async function loadValentines() {
   const container = document.getElementById("valentinesList");
 
-  // Показываем лоадер
   container.innerHTML = `
     <div class="loader-wrapper">
       <div class="loader"></div>
@@ -46,7 +44,6 @@ async function loadValentines() {
   }
 }
 
-// Отправка формы
 async function submitValentine() {
   const text = document.getElementById("message").value.trim();
   const authorEmail = document.getElementById("author_email").value.trim();
@@ -81,7 +78,6 @@ async function submitValentine() {
   const responseMessage = document.getElementById("responseMessage");
   const btn = document.querySelector("button");
 
-  // Блокируем кнопку пока отправляем
   btn.disabled = true;
   btn.textContent = "Отправляем...";
 
