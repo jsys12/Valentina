@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:8000/api/valentines";
+const API_URL = "/api/v1/events";
 
 // Загрузка опубликованных валентинок
 async function loadValentines() {
@@ -13,69 +13,84 @@ async function loadValentines() {
       const card = document.createElement("div");
       card.classList.add("card");
 
+      const date = val.dispatch_date
+        ? new Date(val.dispatch_date).toLocaleDateString("ru-RU")
+        : "";
+
       card.innerHTML = `
-        <p>❤️ ${val.message}</p>
-        <p class="author">— ${val.name}</p>
-        <p class="date">${val.created_at}</p>
+        <p>❤️ ${val.text}</p>
+        <p class="author">— ${val.author_email}</p>
+        <p class="date">${date}</p>
       `;
 
       container.appendChild(card);
     });
 
   } catch (err) {
-    console.log("Backend not connected yet");
+    console.log("Ошибка загрузки валентинок:", err);
   }
 }
 
 // Отправка формы
 async function submitValentine() {
-
-  const message = document.getElementById("message").value;
-  const name = document.getElementById("name").value;
-  const email = document.getElementById("email").value;
+  const text = document.getElementById("message").value.trim();
+  const authorEmail = document.getElementById("author_email").value.trim();
+  const recipientEmail = document.getElementById("email").value.trim();
   const type = document.querySelector('input[name="type"]:checked').value;
+  const isPublic = type === "public";
 
-  if (!message) {
+  if (!text) {
     alert("Введите текст валентинки 💌");
     return;
   }
 
-  const payload = {
-    message: message,
-    name: type === "public" ? name : null,
-    email: type === "anonymous" ? email : null,
-    is_anonymous: type === "anonymous"
-  };
+  if (!authorEmail) {
+    alert("Введите ваш email 💌");
+    return;
+  }
+
+  if (!recipientEmail) {
+    alert("Введите email получателя 💌");
+    return;
+  }
+
+  const dispatch_date = new Date().toISOString().slice(0, 19).replace("T", " ");
+
+  const formData = new FormData();
+  formData.append("text", text);
+  formData.append("author_email", authorEmail);
+  formData.append("recipient_email", recipientEmail);
+  formData.append("dispatch_date", dispatch_date);
+  formData.append("is_public", isPublic);
+
+  const responseMessage = document.getElementById("responseMessage");
 
   try {
     const res = await fetch(API_URL, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(payload)
+      body: formData,
     });
 
-    await res.json();
-
-    const responseMessage = document.getElementById("responseMessage");
-
-    if (type === "anonymous") {
-      responseMessage.innerText = "Валентинка отправлена на почту 💌";
+    if (res.ok) {
+      if (isPublic) {
+        responseMessage.innerText = "Валентинка опубликована 💕";
+      } else {
+        responseMessage.innerText = "Валентинка отправлена на почту 💌";
+      }
       responseMessage.style.color = "green";
+
+      document.getElementById("message").value = "";
+      document.getElementById("author_email").value = "";
+      document.getElementById("email").value = "";
+
+      loadValentines();
     } else {
-      responseMessage.innerText = "Валентинка опубликована 💕";
-      responseMessage.style.color = "green";
+      const err = await res.json();
+      responseMessage.innerText = "Ошибка: " + (err.detail || "Что-то пошло не так");
+      responseMessage.style.color = "red";
     }
 
-    document.getElementById("message").value = "";
-    document.getElementById("name").value = "";
-    document.getElementById("email").value = "";
-
-    loadValentines();
-
   } catch (err) {
-    const responseMessage = document.getElementById("responseMessage");
     responseMessage.innerText = "Ошибка соединения с сервером ⚠️";
     responseMessage.style.color = "red";
   }
